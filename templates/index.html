@@ -4,14 +4,26 @@
 
 <script></script>
 <meta charset="UTF-8" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+  $("#pp").click(function(){
+    $(this).hide();
+  });
+});
+</script>
     <script type="text/javascript">
 
-        $(function() {
+
+
+        $(document).ready(function() {
             function getUrlParam(name)
             {
-                Var reg = new regexp ("(^|)" + name + "= ([^ &] *) (&| $)"); // construct a regular expression object with target parameters
-                var r =  window.location.search . substr (1). Match (reg); // match target parameters
-                If (r! = null) return unescape (R [2]); return null; // return parameter value
+                var reg = new RegExp ("(^|)" + name + "= ([^ &] *) (&| $)"); // construct a regular expression object with target parameters
+                var r =  window.location.search.substr(1).match(reg); // match target parameters
+                if (r!= null) return unescape (r[2]); return null; // return parameter value
             }
             var conn;
             var msg = $("#msg");
@@ -35,7 +47,7 @@
                 if (!msg.val()) {
                     return false;
                 }
-                var json = {"sender":uid,"recipient":to_ uid,"content": msg.val ()}; // create object;
+                var json = {"sender":uid,"recipient":to_uid,"content": msg.val()}; // create object;
                 var jsonStr =  JSON.stringify (JSON); // convert to JSON string
 
                 conn.send(jsonStr);
@@ -98,7 +110,7 @@
 <body>
 <div id="log"></div>
 <form id="form">
-    < input type = "submit" value = "send" / >
+    <input type = "submit" value = "send" / >
     <input type="text" id="msg" size="64"/>
 </form>
 </body>

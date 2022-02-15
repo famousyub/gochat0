@@ -9,7 +9,7 @@ import (
 //server
 func main() {
 
-    gin.SetMode ( gin.ReleaseMode ）// online environment
+    //gin.SetMode(gin.ReleaseMode）// online environment
 
     go ws.Manager.Start()
     r := gin.Default()
