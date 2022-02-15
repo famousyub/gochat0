@@ -5,7 +5,7 @@ import (
     "github.com/gin-gonic/gin"
     "github.com/famousyub/gochat0/ws"
 )
-
+//https://github.com/famousyub/gochat0
 //server
 func main() {
 

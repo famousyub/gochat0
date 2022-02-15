@@ -45,12 +45,12 @@ func (manager *ClientManager) Start() {
         log.Println ("< --- pipeline communication -- >")
         select {
         case conn := <-Manager.Register:
-            log.Printf ("new user joined in% v"), conn.ID )
+            log.Printf ("new user joined in% v", conn.ID )
             Manager.Clients[conn.ID] = conn
             jsonMessage, _ := json.Marshal(&Message{Content: "Successful connection to socket service"})
             conn.Send <- jsonMessage
         case conn := <-Manager.Unregister:
-            log.Printf ("user left% v"), conn.ID )
+            log.Printf ("user left% v", conn.ID )
             if _, ok := Manager.Clients[conn.ID]; ok {
                 jsonMessage, _ := json.Marshal(&Message{Content: "A socket has disconnected"})
                 conn.Send <- jsonMessage
