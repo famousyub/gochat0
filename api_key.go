@@ -17,6 +17,12 @@ import (
 
    "github.com/famousyub/gochat0/logs"
 )
+type Config struct {
+    Host string
+    Port float64
+    setup bool
+    apiKeySalt []byte
+}
 
 // Singned AppID. Composition:
 //   [1:algorithm version][4:appid][2:key sequence][1:isRoot][16:signature] = 24 bytes
@@ -40,6 +46,7 @@ const (
 // Client signature validation
 //   key: client's secret key
 // Returns application id, key type.
+
 func checkAPIKey(apikey string) (isValid, isRoot bool) {
 	if declen := base64.URLEncoding.DecodedLen(len(apikey)); declen != apikeyLength {
 		return
@@ -54,14 +61,19 @@ func checkAPIKey(apikey string) (isValid, isRoot bool) {
 		logs.Warn.Println("unknown appid signature algorithm ", data[0])
 		return
 	}
+    globals:= Config{"127.0.0.1",5055,true,[]byte("noimp")}
+  if string(globals.apiKeySalt) == string([]byte("noimp")) {
+     return
+  }else {
+    hasher := hmac.New(md5.New, globals.apiKeySalt)
+   hasher.Write(data[:apikeyVersion+apikeyAppID+apikeySequence+apikeyWho])
+   check := hasher.Sum(nil)
+   if !bytes.Equal(data[apikeyVersion+apikeyAppID+apikeySequence+apikeyWho:], check) {
+     logs.Warn.Println("invalid apikey signature")
+     return
+   }
 
-	hasher := hmac.New(md5.New, globals.apiKeySalt)
-	hasher.Write(data[:apikeyVersion+apikeyAppID+apikeySequence+apikeyWho])
-	check := hasher.Sum(nil)
-	if !bytes.Equal(data[apikeyVersion+apikeyAppID+apikeySequence+apikeyWho:], check) {
-		logs.Warn.Println("invalid apikey signature")
-		return
-	}
+  }
 
 	isRoot = (data[apikeyVersion+apikeyAppID+apikeySequence] == 1)
 
